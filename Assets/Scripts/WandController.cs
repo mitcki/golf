@@ -26,7 +26,7 @@ public class WandController : MonoBehaviour {
             return;
         }
 
-        if (controller.GetPressDown(gripButton)) {
+        if (controller.GetPressDown(triggerButton)) {
             float minDistance = float.MaxValue;
 
             float distance;
@@ -50,7 +50,7 @@ public class WandController : MonoBehaviour {
             }
         }
 
-        if (controller.GetPressUp(gripButton) && interactingItem != null) {
+        if (controller.GetPressUp(triggerButton) && interactingItem != null) {
             interactingItem.EndInteraction(this);
         }
 	}
