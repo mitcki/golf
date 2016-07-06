@@ -56,6 +56,7 @@ public class WandController : MonoBehaviour {
 	}
 
     private void OnTriggerEnter(Collider collider) {
+		Debug.Log("Trigger Enter");
         InteractableItem collidedItem = collider.GetComponent<InteractableItem>();
         if (collidedItem) {
             objectsHoveringOver.Add(collidedItem);
@@ -63,6 +64,7 @@ public class WandController : MonoBehaviour {
     }
 
     private void OnTriggerExit(Collider collider) {
+		Debug.Log("Trigger Exit");
         InteractableItem collidedItem = collider.GetComponent<InteractableItem>();
         if (collidedItem) {
             objectsHoveringOver.Remove(collidedItem);
