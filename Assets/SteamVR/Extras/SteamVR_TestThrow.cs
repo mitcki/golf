@@ -25,7 +25,9 @@ public class SteamVR_TestThrow : MonoBehaviour
 
 			joint = go.AddComponent<FixedJoint>();
 			joint.connectedBody = attachPoint;
-		}
+
+            Physics.IgnoreCollision(go.GetComponent<Collider>(), GameObject.Find("Terrain").GetComponent<Collider>());
+        }
 		else if (joint != null && device.GetTouchUp(SteamVR_Controller.ButtonMask.Trigger))
 		{
 			var go = joint.gameObject;

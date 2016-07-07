@@ -26,6 +26,8 @@ public class WandController : MonoBehaviour {
 
         joint = go.AddComponent<FixedJoint>();
         joint.connectedBody = attachPoint;
+
+        
     }
 	
 	// Update is called once per frame
