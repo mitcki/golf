@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class InteractableItem : MonoBehaviour {
-    public Rigidbody rigidbody;
+    public Rigidbody rb;
 
     private bool currentlyInteracting;
 
@@ -20,17 +20,17 @@ public class InteractableItem : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        rigidbody = GetComponent<Rigidbody>();
+        rb = GetComponent<Rigidbody>();
         interactionPoint = new GameObject().transform;
-        velocityFactor /= rigidbody.mass;
-        rotationFactor /= rigidbody.mass;
+        velocityFactor /= rb.mass;
+        rotationFactor /= rb.mass;
 	}
 	
 	// Update is called once per frame
 	void Update() {
 	    if (attachedWand && currentlyInteracting) {
             posDelta = attachedWand.transform.position - interactionPoint.position;
-            this.rigidbody.velocity = posDelta * velocityFactor * Time.fixedDeltaTime;
+            this.rb.velocity = posDelta * velocityFactor * Time.fixedDeltaTime;
 
             rotationDelta = attachedWand.transform.rotation * Quaternion.Inverse(interactionPoint.rotation);
             rotationDelta.ToAngleAxis(out angle, out axis);
@@ -39,7 +39,7 @@ public class InteractableItem : MonoBehaviour {
                 angle -= 360;
             }
 
-            this.rigidbody.angularVelocity = (Time.fixedDeltaTime * angle * axis) * rotationFactor;
+            this.rb.angularVelocity = (Time.fixedDeltaTime * angle * axis) * rotationFactor;
         }
 	}
 

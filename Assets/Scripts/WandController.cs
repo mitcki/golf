@@ -1,6 +1,8 @@
-﻿using UnityEngine;
+﻿
+using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
+
+[RequireComponent(typeof(SteamVR_TrackedObject))]
 
 public class WandController : MonoBehaviour {
     private Valve.VR.EVRButtonId gripButton = Valve.VR.EVRButtonId.k_EButton_Grip;
@@ -9,15 +11,22 @@ public class WandController : MonoBehaviour {
     private SteamVR_Controller.Device controller { get { return SteamVR_Controller.Input((int)trackedObj.index); } }
     private SteamVR_TrackedObject trackedObj;
 
-    HashSet<InteractableItem> objectsHoveringOver = new HashSet<InteractableItem>();
+    private GameObject pickup;
 
-    private InteractableItem closestItem;
-    private InteractableItem interactingItem;
+    public Rigidbody attachPoint;
 
-	// Use this for initialization
-	void Start () {
+    FixedJoint joint;
+
+    // Use this for initialization
+    void Start () {
         trackedObj = GetComponent<SteamVR_TrackedObject>();
-	}
+
+        var go = GameObject.Find("club");
+        go.transform.position = attachPoint.transform.position;
+
+        joint = go.AddComponent<FixedJoint>();
+        joint.connectedBody = attachPoint;
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -26,48 +35,21 @@ public class WandController : MonoBehaviour {
             return;
         }
 
-        if (controller.GetPressDown(triggerButton)) {
-            float minDistance = float.MaxValue;
-
-            float distance;
-            foreach (InteractableItem item in objectsHoveringOver) {
-                distance = (item.transform.position - transform.position).sqrMagnitude;
-
-                if (distance < minDistance) {
-                    minDistance = distance;
-                    closestItem = item;
-                }
-            }
-
-            interactingItem = closestItem;
-
-            if (interactingItem) {
-                if (interactingItem.IsInteracting()) {
-                    interactingItem.EndInteraction(this);
-                }
-
-                interactingItem.BeginInteraction(this);
-            }
+        if (controller.GetPressDown(gripButton) && pickup != null) {
+            pickup.transform.parent = this.transform;
+            pickup.GetComponent<Rigidbody>().useGravity = false;
         }
-
-        if (controller.GetPressUp(triggerButton) && interactingItem != null) {
-            interactingItem.EndInteraction(this);
+        if (controller.GetPressUp(gripButton) && pickup != null) {
+            pickup.transform.parent = null;
+            pickup.GetComponent<Rigidbody>().useGravity = true;
         }
 	}
 
     private void OnTriggerEnter(Collider collider) {
-		Debug.Log("Trigger Enter");
-        InteractableItem collidedItem = collider.GetComponent<InteractableItem>();
-        if (collidedItem) {
-            objectsHoveringOver.Add(collidedItem);
-        }
+        pickup = collider.gameObject;
     }
 
     private void OnTriggerExit(Collider collider) {
-		Debug.Log("Trigger Exit");
-        InteractableItem collidedItem = collider.GetComponent<InteractableItem>();
-        if (collidedItem) {
-            objectsHoveringOver.Remove(collidedItem);
-        }
+        pickup = null;
     }
 }
