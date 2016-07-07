@@ -30,26 +30,26 @@ public class WandController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	    if (controller == null) {
-            Debug.Log("Controller not initialized");
-            return;
-        }
-
-        if (controller.GetPressDown(gripButton) && pickup != null) {
-            pickup.transform.parent = this.transform;
-            pickup.GetComponent<Rigidbody>().useGravity = false;
-        }
-        if (controller.GetPressUp(gripButton) && pickup != null) {
-            pickup.transform.parent = null;
-            pickup.GetComponent<Rigidbody>().useGravity = true;
-        }
+//	    if (controller == null) {
+//            Debug.Log("Controller not initialized");
+//            return;
+//        }
+//
+//        if (controller.GetPressDown(gripButton) && pickup != null) {
+//            pickup.transform.parent = this.transform;
+//            pickup.GetComponent<Rigidbody>().useGravity = false;
+//        }
+//        if (controller.GetPressUp(gripButton) && pickup != null) {
+//            pickup.transform.parent = null;
+//            pickup.GetComponent<Rigidbody>().useGravity = true;
+//        }
 	}
 
     private void OnTriggerEnter(Collider collider) {
-        pickup = collider.gameObject;
+//        pickup = collider.gameObject;
     }
 
     private void OnTriggerExit(Collider collider) {
-        pickup = null;
+//        pickup = null;
     }
 }
