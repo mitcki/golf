@@ -5,6 +5,7 @@ using System.Collections;
 public class SteamVR_TestThrow : MonoBehaviour
 {
 	public GameObject prefab;
+	public GameObject ball;
 	public Rigidbody attachPoint;
 
 	SteamVR_TrackedObject trackedObj;
@@ -18,6 +19,13 @@ public class SteamVR_TestThrow : MonoBehaviour
 	void FixedUpdate()
 	{
 		var device = SteamVR_Controller.Input((int)trackedObj.index);
+
+		if(device.GetTouchDown(SteamVR_Controller.ButtonMask.Grip))
+		{
+			var go = GameObject.Instantiate(ball);
+			go.transform.position = attachPoint.transform.position;
+		}
+
 		if (joint == null && device.GetTouchDown(SteamVR_Controller.ButtonMask.Trigger))
 		{
 			var go = GameObject.Instantiate(prefab);
